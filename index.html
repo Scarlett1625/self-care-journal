@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Care Journal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #0052cc;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            color: #0052cc;
+        }
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #0052cc;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #003d99;
+        }
+        .output {
+            padding: 10px;
+            background-color: #e0e7ff;
+            border: 1px solid #ccd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .chart-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Self-Care Journal</h1>
+    </div>
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="resources.html">Resources</a>
+    </div>
+
+    <!-- Home Page Content -->
+    <div class="section">
+        <h2>Daily Reflection</h2>
+        <textarea class="input-box" id="reflection" rows="4" placeholder="What did I do today that brought me joy?"></textarea>
+        <button class="btn" onclick="saveReflection()">Save Reflection</button>
+        <div id="reflectionOutput" class="output"></div>
+    </div>
+    <div class="section">
+        <h2>Daily Goals and Intentions</h2>
+        <input type="text" class="input-box" id="goal" placeholder="Set your daily goal...">
+        <button class="btn" onclick="saveGoal()">Save Goal</button>
+        <div id="goalOutput" class="output"></div>
+    </div>
+    <div class="section">
+        <h2>Gratitude List</h2>
+        <textarea class="input-box" id="gratitude" rows="4" placeholder="Write down what you're grateful for today..."></textarea>
+        <button class="btn" onclick="saveGratitude()">Save Gratitude</button>
+        <div id="gratitudeOutput" class="output"></div>
+    </div>
+    <div class="section">
+        <h2>Mindfulness Practices</h2>
+        <input type="text" class="input-box" id="mindfulness" placeholder="Practice mindfulness...">
+        <button class="btn" onclick="saveMindfulness()">Save Mindfulness</button>
+        <div id="mindfulnessOutput" class="output"></div>
+    </div>
+    <div class="section">
+        <h2>Mood Tracker</h2>
+        <input type="range" id="mood" min="0" max="10" step="1">
+        <button class="btn" onclick="saveMood()">Save Mood</button>
+        <div id="moodOutput" class="output"></div>
+    </div>
+    <div class="chart-container">
+        <canvas id="moodChart"></canvas>
+    </div>
+
+    <script>
+        var moodData = [];
+
+        function saveReflection() {
+            var reflection = document.getElementById('reflection').value;
+            document.getElementById('reflectionOutput').innerText = "Reflection Saved: " + reflection;
+        }
+        function saveGoal() {
+            var goal = document.getElementById('goal').value;
+            document.getElementById('goalOutput').innerText = "Goal Saved: " + goal;
+        }
+        function saveGratitude() {
+            var gratitude = document.getElementById('gratitude').value;
+            document.getElementById('gratitudeOutput').innerText = "Gratitude Saved: " + gratitude;
+        }
+        function saveMindfulness() {
+            var mindfulness = document.getElementById('mindfulness').value;
+            document.getElementById('mindfulnessOutput').innerText = "Mindfulness Practice Saved: " + mindfulness;
+        }
+        function saveMood() {
+            var mood = document.getElementById('mood').value;
+            moodData.push(mood);
+            updateChart();
+            document.getElementById('moodOutput').innerText = "Mood Saved: " + mood;
+        }
+
+        function updateChart() {
+            var ctx = document.getElementById('moodChart').getContext('2d');
+            var moodCount = moodData.reduce((acc, mood) => {
+                acc[mood] = (acc[mood] || 0) + 1;
+                return acc;
+            }, {});
+            var chartData = {
+                labels: Object.keys(moodCount),
+                datasets: [{
+                    data: Object.values(moodCount),
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#4bc0c0', '#f39c12', '#e74c3c', '#8e44ad', '#2ecc71', '#1abc9c']
+                }]
+            };
+            new Chart(ctx, {
+                type: 'pie',
+                data: chartData
+            });
+        }
+    </script>
+</body>
+</html>
